@@ -5,7 +5,7 @@ class UserDB(BaseModel):
     username: str
     password: str
 
-database_users = DIct[str, UserDB]
+database_users = Dict[str, UserDB]
 
 database_users = {
     "gura20": UserDB(**{"username":"gura20",
@@ -19,3 +19,9 @@ def get_user(username: str):
         return database_users[username]
     else: 
         return None
+
+def post_user(username: str, password: str):
+    UserDB.username= username
+    UserDB.password = password
+    database_users.append(UserDB)
+    return UserDB
