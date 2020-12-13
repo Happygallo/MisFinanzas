@@ -12,6 +12,8 @@ database_users = {
                             "password":"root"}),
     "watson09": UserDB(**{"username":"watson09",
                             "password":"doom"}),
+    "ivan": UserDB(**{"username":"ivan",
+                            "password":"navi"}),                        
 }
 
 def get_user(username: str):
@@ -20,8 +22,9 @@ def get_user(username: str):
     else: 
         return None
 
-def post_user(username: str, password: str):
+
+def post_user(username: str, password: str, user_in_db: UserDB):
     UserDB.username= username
     UserDB.password = password
-    database_users.append(UserDB)
+    database_users[str(username)] = UserDB
     return UserDB
