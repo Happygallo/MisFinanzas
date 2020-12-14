@@ -1,27 +1,43 @@
-from db.user_db import UserInDB
-from db.user_db import update_user, get_user
-from db.transaction_db import TransactionInDB
-from db.transaction_db import save_transaction
-from models.user_models import UserIn, UserOut
-from models.transaction_models import TransactionIn, TransactionOut
+from db.user_db import UserDB
+from db.user_db import database_users
+from db.user_db import post_user, get_user
+from models.user_models import UserIn
 import datetime
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
 api = FastAPI()
 
-@app.get("/usuario/{username}")
-async def display_user(username: str, request: Request):
+# página de inicio
+@api.get("/")
+def inicio():
+    #inicio de la aplicacion, petición de usuario
+    return {"Pagina de Inicio": "Mision TIC 2022 - Mis Finanzas"}
+
+@api.get("/users/")
+async def users():
+    return {"message": database_users}
+
+# mostrar usuario
+@api.get("/users/{username}")
+async def display_user(username: str):
     user_in_db = get_user(username)
     if user_in_db == None:
         raise HTTPException(status_code=404, detail="El usuario no existe")
-    user_out = UserOut(**user_in_db.dict())
-    return templates.TemplateResponse("usuario.html", {
-        "request": request,
-        "usuario": str(user_out.username),
-    })
+    user_out = UserIn(**user_in_db.dict())
+    return user_out
 
-@app.post("/crear_usuario/")
-async def create_user(user_in: UserIn):
-    user_in_db = UserDB(**user_in.dict())
-    user_in_db = post_user(user_in_db.username, user_in.password, user_in_db=UserDB)
+# crear usuario
+@api.post("/users/")
+async def create_user(user_in: UserDB):
+    database_users[user_in.username] = user_in
     return user_in
+
+@api.post("/users/auth/")
+async def auth_user(user_in: UserIn):
+    user_in_db = get_user(user_in.username)
+    if user_in_db == None:
+        raise HTTPException(status_code=404, detail="El usuario no existe")
+    if user_in_db.password != user_in.password:
+        return  {"Autenticado": False}
+    return  {"Autenticado": True}
