@@ -1,35 +1,43 @@
-from fastapi import FastAPI, Request, HTTPException 
-from fastapi.templating import Jinja2Templates
-from db.user_db import get_user, post_user, UserDB
-from models.user_models import UserIn, UserOut
-app = FastAPI()
+from db.user_db import UserDB
+from db.user_db import database_users
+from db.user_db import post_user, get_user
+from models.user_models import UserIn
+import datetime
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
-templates = Jinja2Templates(directory="layout")
+api = FastAPI()
 
-@app.get("/")
-def inicio(request: Request):
-    """
-    inicio de la aplicacion, petición de usuario
-    """
-    return templates.TemplateResponse("inicio.html", {
-        "request": request,
-        "variable": "MinTIC 2022"
-    })
+# página de inicio
+@api.get("/")
+def inicio():
+    #inicio de la aplicacion, petición de usuario
+    return {"Pagina de Inicio": "Mision TIC 2022 - Mis Finanzas"}
 
+@api.get("/users/")
+async def users():
+    return {"message": database_users}
 
-@app.get("/usuario/{username}")
-async def display_user(username: str, request: Request):
+# mostrar usuario
+@api.get("/users/{username}")
+async def display_user(username: str):
     user_in_db = get_user(username)
     if user_in_db == None:
         raise HTTPException(status_code=404, detail="El usuario no existe")
-    user_out = UserOut(**user_in_db.dict())
-    return templates.TemplateResponse("usuario.html", {
-        "request": request,
-        "usuario": str(user_out.username),
-    })
+    user_out = UserIn(**user_in_db.dict())
+    return user_out
 
-@app.post("/crear_usuario/")
-async def create_user(user_in: UserIn):
-    user_in_db = UserDB(**user_in.dict())
-    user_in_db = post_user(user_in_db.username, user_in.password, user_in_db=UserDB)
+# crear usuario
+@api.post("/users/")
+async def create_user(user_in: UserDB):
+    database_users[user_in.username] = user_in
     return user_in
+
+@api.post("/users/auth/")
+async def auth_user(user_in: UserIn):
+    user_in_db = get_user(user_in.username)
+    if user_in_db == None:
+        raise HTTPException(status_code=404, detail="El usuario no existe")
+    if user_in_db.password != user_in.password:
+        return  {"Autenticado": False}
+    return  {"Autenticado": True}
