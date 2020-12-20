@@ -61,8 +61,18 @@ async def auth_user(user_in: UserIn):
     return  {"Autenticado": True}
 
 
+# mostrar balance del usuario
+@api.get("/users/{username}/balance")
+async def display_user_balance(username: str):
+    user_in_db = get_user(username)
+    if user_in_db == None:
+        raise HTTPException(status_code=404, detail="El usuario no existe")
+    user_out = UserIn(**user_in_db.dict())
+    return user_out.balance
+
+
 # movimiento de usuario
-@api.put("/user/movement/")
+@api.put("/users/{username}/movement/")
 async def make_movement(movement_in: MovementIn):
 
     user_in_db = get_user(movement_in.username)

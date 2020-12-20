@@ -4,17 +4,17 @@ from pydantic import BaseModel
 class UserDB(BaseModel):
     username: str
     password: str
-    balance: float
+    balance: int
 
 database_users = Dict[str, UserDB]
 
 database_users = {
     "gura20": UserDB(**{"username":"gura20",
                             "password":"root",
-                            "balance": 12000.0}),
+                            "balance": 12000}),
     "watson09": UserDB(**{"username":"watson09",
                             "password":"doom",
-                            "balance": 15000.0}),
+                            "balance": 15000}),
 }
 
 def get_user(username: str):
