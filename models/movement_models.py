@@ -6,12 +6,12 @@ class MovementIn(BaseModel):
     username: str
     date: datetime
     concept: str
-    amount: int
+    amount: float
 
 class MovementOut(BaseModel):
     id_movement: int
     username: str
     date: datetime
     concept: str
-    amount: int
-    budget: int
+    amount: float
+    budget: float
