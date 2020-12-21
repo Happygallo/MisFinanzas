@@ -9,11 +9,18 @@ from fastapi.middleware.cors import CORSMiddleware
 api = FastAPI()
 
 origins = [
-    "http://localhost", "http://localhost:8080",
+     "http://localhost", 
+     "http://localhost:8080",
+     "http://app-misfinanzas.herokuapp.com",
+     "https://app-misfinanzas.herokuapp.com"
 ]
+
 api.add_middleware(
-    CORSMiddleware, allow_origins=origins,
-    allow_credentials=True, allow_methods=["*"], allow_headers=["*"],
+    CORSMiddleware,
+    allow_origins = origins,
+    allow_credentials = True,
+    allow_methods = ["*"],
+    allow_headers = ["*"],
 )
 
 # página de inicio
@@ -47,5 +54,5 @@ async def auth_user(user_in: UserIn):
     if user_in_db == None:
         raise HTTPException(status_code=404, detail="El usuario no existe")
     if user_in_db.password != user_in.password:
-        return  {"Autenticado": False}
+        raise HTTPException(status_code=403, detail="Error de autenticacion")
     return  {"Autenticado": True}
