@@ -4,6 +4,7 @@ from datetime import datetime
 class MovementIn(BaseModel):
     id_movement: int
     username: str
+    password: str
     date: datetime
     concept: str
     amount: float

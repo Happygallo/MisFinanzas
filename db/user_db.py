@@ -4,7 +4,7 @@ from pydantic import BaseModel
 class UserDB(BaseModel):
     username: str
     password: str
-    balance: int
+    budget: int
 
 database_users = Dict[str, UserDB]
 
