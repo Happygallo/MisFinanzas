@@ -34,7 +34,10 @@ api.add_middleware(
 
 @api.get("/users/")
 async def users():
-    return {"users": database_budget}
+    users = []
+    for i in database_users:
+        users.append(i)        
+    return {"users": users}
 
 # crear usuario
 @api.post("/users/")
