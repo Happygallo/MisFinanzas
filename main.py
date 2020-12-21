@@ -68,28 +68,28 @@ async def display_user_balance(username: str):
     if user_in_db == None:
         raise HTTPException(status_code=404, detail="El usuario no existe")
     user_out = UserIn(**user_in_db.dict())
-    return user_out.balance
+    return user_out.budget
 
 
 # movimiento de usuario
 @api.put("/users/{username}/movement/")
 async def make_movement(movement_in: MovementIn):
-
+    
     user_in_db = get_user(movement_in.username)
 
     if user_in_db == None:
         raise HTTPException(status_code=404, detail="El usuario no existe")
 
-    if movement_in.movement == 'outcome' and user_in_db.balance <= movement_in.amount: 
+    if movement_in.concept == 'outcome' and user_in_db.budget <= movement_in.amount: 
         raise HTTPException(status_code=400, detail="El gasto ingresado supera su balance actual de ahorro")
 
-    if movement_in.movement == 'outcome':
-        user_in_db.balance = user_in_db.balance - movement_in.amount
+    if movement_in.concept == 'outcome':
+        user_in_db.budget = user_in_db.budget - movement_in.amount
     else:
-        user_in_db.balance = user_in_db.balance + movement_in.amount
+        user_in_db.budget = user_in_db.budget + movement_in.amount
 
     update_user(user_in_db)
-    movement_in_db = MovementInDB(**movement_in.dict(), actual_balance = user_in_db.balance)
+    movement_in_db = MovementInDB(**movement_in.dict(), actual_balance = user_in_db.budget)
     movement_in_db = save_movement(movement_in_db)
 
     movement_out = MovementOut(**movement_in_db.dict())

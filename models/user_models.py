@@ -3,4 +3,6 @@ from pydantic import BaseModel
 class UserIn(BaseModel):
     username: str
     password: str
-    balance: int
+    budget: float 
+    expenses: float
+    remaining: float

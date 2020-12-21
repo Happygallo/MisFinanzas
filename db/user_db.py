@@ -11,10 +11,14 @@ database_users = Dict[str, UserDB]
 database_users = {
     "gura20": UserDB(**{"username":"gura20",
                             "password":"root",
-                            "balance": 12000}),
+                            "budget": 12000,
+                            "expenses": 0,
+                            "remaining": 12000}),
     "watson09": UserDB(**{"username":"watson09",
                             "password":"doom",
-                            "balance": 15000}),
+                            "budget": 15000,
+                            "expenses": 0,
+                            "remaining": 15000}),
 }
 
 def get_user(username: str):
@@ -23,10 +27,12 @@ def get_user(username: str):
     else: 
         return None
 
-def post_user(username: str, password: str, balance: float):
+def post_user(username: str, password: str, budget: float, expenses: float, remaining: float):
     UserDB.username= username
     UserDB.password = password
-    UserDB.balance = balance
+    UserDB.budget = budget
+    UserDB.expenses = expenses
+    UserDB.remaining = remaining
     database_users.append(UserDB)
     return UserDB
 
