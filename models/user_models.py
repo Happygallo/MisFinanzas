@@ -3,7 +3,14 @@ from pydantic import BaseModel
 class UserIn(BaseModel):
     username: str
     password: str
-    amount: float
     budget: float
-    expenses: float
-    remaining: float
+
+class Transaccion(BaseModel):
+    usuario: int
+    concept: str
+    amount: int
+    budget: int
+
+
+
+

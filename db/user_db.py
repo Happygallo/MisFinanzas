@@ -11,15 +11,12 @@ database_users = Dict[str, UserDB]
 database_users = {
     "gura20": UserDB(**{"username":"gura20",
                             "password":"root",
-                            "budget": 12000,
-                            "expenses": 0,
-                            "remaining": 12000}),
+                            "budget": 12000}),
     "watson09": UserDB(**{"username":"watson09",
                             "password":"doom",
-                            "budget": 15000,
-                            "expenses": 0,
-                            "remaining": 15000}),
+                            "budget": 15000}),
 }
+
 
 def get_user(username: str):
     if username in database_users.keys():
@@ -31,11 +28,15 @@ def post_user(username: str, password: str, budget: float, expenses: float, rema
     UserDB.username= username
     UserDB.password = password
     UserDB.budget = budget
-    UserDB.expenses = expenses
-    UserDB.remaining = remaining
     database_users.append(UserDB)
     return UserDB
 
 def update_user(user_in_db: UserDB):
     database_users[user_in_db.username] = user_in_db
     return user_in_db
+
+def update_user_balance(user_in_db: UserDB):
+    database_users[user_in_db.username] = user_in_db
+    return user_in_db
+
+

@@ -6,7 +6,8 @@ from db.movement_db import MovementInDB
 from db.movement_db import save_movement
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from models.movement_models import MovementIn, MovementOut
+from models.movement_models import MovementOut, get_movements, add_movement
+
 
 api = FastAPI()
 
@@ -71,9 +72,27 @@ async def display_user_balance(username: str):
     return user_out.budget
 
 
+
+
+
+@api.post("/movimiento/")
+async def agregar_movimiento(movement: MovementOut):
+    creado = add_movement(movement)
+    if creado:
+        return {"mensaje": "Movimiento generado"}
+    else:
+        raise HTTPException(status_code=400, detail="Lo siento, la id del movimiento esta ya creada")
+
+
+@api.get("/movimientos/ver")
+async def obtener_movimientos(username: str):
+    movimientos = get_movements(username)
+    return movimientos
+
+
 # movimiento de usuario
 @api.put("/users/{username}/movement/")
-async def make_movement(movement_in: MovementIn):
+async def make_movement(movement_in: MovementOut):
     
     user_in_db = get_user(movement_in.username)
 
