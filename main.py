@@ -89,7 +89,7 @@ async def make_movement(movement_in: MovementIn):
         user_in_db.budget = user_in_db.budget + movement_in.amount
 
     update_user(user_in_db)
-    movement_in_db = MovementInDB(**movement_in.dict(), actual_balance = user_in_db.budget)
+    movement_in_db = MovementInDB(**movement_in.dict(), budget = user_in_db.budget)
     movement_in_db = save_movement(movement_in_db)
 
     movement_out = MovementOut(**movement_in_db.dict())
