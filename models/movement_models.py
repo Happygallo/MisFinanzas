@@ -7,14 +7,16 @@ from db.user_db import post_user, get_user, get_auth_user
 #     password: str
 #     concept: str
 #     amount: float
+num = 7
 class MovementOut(BaseModel):
-    now = str(datetime.now())[:15]
-    id = int(str(datetime.now())[-5:])
+    id: int = 10
     username: str
-    date = now
+    date = str(datetime.now())[:10]
     concept: str
     amount: float
     #budget: float
+
+generator = {"id":10}
 class BudgetOut(BaseModel):
     username: str
     budget: int
@@ -41,6 +43,8 @@ def get_movements(username: str):
 
 
 def add_movement(movement: MovementOut):
+    generator["id"] = generator["id"]+1
+    movement.id = generator["id"]
     if movement.id in movements:
         return False
     else:
@@ -51,11 +55,11 @@ def add_movement(movement: MovementOut):
 def sum_balance(username: str):
     user_in = get_user(username)
     user_budget = user_in.budget
-    
+
     user_movs = get_movements(username)
     gastos = []
     for i in user_movs:
         gastos.append(i.amount)
     gastos = sum(gastos)
     restante = user_budget - gastos
-    return user_budget, gastos, restante
+    return username, user_budget, gastos, restante, user_movs
