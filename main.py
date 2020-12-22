@@ -49,7 +49,7 @@ async def create_user(user_in: UserDB): # usuario y contraseña
     return user_in
 
 # dar balance a usuario 
-@api.get("/users/budget") # usuario y presupuesto
+@api.get("/users/budget/{username}") # usuario y presupuesto
 async def mostrar_presupuesto(username: str):
     presupuesto = get_user(username)
     return presupuesto
