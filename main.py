@@ -54,10 +54,11 @@ async def update_budget(budget_in: BudgetDB):
 # mostrar usuario
 @api.get("/users/{username}")
 async def ver_usuario(username: str):
-
-    username, budget, gastos, restante, movimientos = sum_balance(username)
-    estado = {"username": username, "budget": budget, "gastos": gastos, "restante": restante, "movimientos": movimientos}
-
+    try:
+        username, budget, gastos, restante, movimientos = sum_balance(username)
+        estado = {"username": username, "budget": budget, "gastos": gastos, "restante": restante, "movimientos": movimientos}
+    except:
+        estado = {"username": username, "budget": 0, "gastos": 0, "restante": 0, "movimientos": get_movements(username)}
     return estado
 
 # @api.get("/users/{username}")
