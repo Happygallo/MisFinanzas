@@ -68,7 +68,7 @@ async def ver_usuario(username: str):
         estado = {"username": username, "budget": budget, "gastos": gastos, "restante": restante, "movimientos": movimientos}
     except:
         username, budget, gastos, restante, movimientos = sum_on_zero(username)
-        estado = {"username": username, "budget": budget, "gastos": gastos, "restante": restante, "movimientos": movimientos}
+        estado = {"username": username, "budget": budget, "gastos": gastos, "restante": restante, "movimientos": get_movements(username)}
     return estado
 
 # @api.get("/users/{username}")
