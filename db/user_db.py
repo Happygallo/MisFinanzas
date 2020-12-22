@@ -6,7 +6,7 @@ class UserDB(BaseModel):
     password: str    
 class BudgetDB(BaseModel):
     username: str
-    budget: int
+    budget: float=0
 
 database_users = Dict[str, UserDB]
 

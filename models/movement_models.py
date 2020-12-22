@@ -66,3 +66,14 @@ def sum_balance(username: str):
     gastos = sum(gastos)
     restante = user_budget - gastos
     return username, user_budget, gastos, restante, user_movs
+
+
+def sum_on_zero(username: str):
+    user_budget = 0
+    user_movs = get_movements(username)
+    gastos = []
+    for i in user_movs:
+        gastos.append(i.amount)
+    gastos = sum(gastos)
+    restante = user_budget - gastos
+    return username, user_budget, gastos, restante, user_movs

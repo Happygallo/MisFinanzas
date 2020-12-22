@@ -6,7 +6,7 @@ from db.movement_db import MovementInDB
 from db.movement_db import save_movement
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from models.movement_models import MovementOut, get_movements, add_movement, sum_balance
+from models.movement_models import MovementOut, get_movements, add_movement, sum_balance, sum_on_zero
 
 
 api = FastAPI()
@@ -43,7 +43,16 @@ async def users():
 @api.post("/users/")
 async def create_user(user_in: UserDB): # usuario y contraseña
     database_users[user_in.username] = user_in
+    async def update_budget(budget_in: BudgetDB):
+        database_budget[budget_in.username] = budget_in
+        return budget_in
     return user_in
+
+# dar balance a usuario 
+@api.get("/users/budget") # usuario y presupuesto
+async def mostrar_presupuesto(username: str):
+    presupuesto = get_user(username)
+    return presupuesto
 
 # dar balance a usuario 
 @api.post("/users/budget") # usuario y presupuesto
@@ -58,7 +67,8 @@ async def ver_usuario(username: str):
         username, budget, gastos, restante, movimientos = sum_balance(username)
         estado = {"username": username, "budget": budget, "gastos": gastos, "restante": restante, "movimientos": movimientos}
     except:
-        estado = {"username": username, "budget": 0, "gastos": 0, "restante": 0, "movimientos": get_movements(username)}
+        username, budget, gastos, restante, movimientos = sum_on_zero(username)
+        estado = {"username": username, "budget": budget, "gastos": gastos, "restante": restante, "movimientos": movimientos}
     return estado
 
 # @api.get("/users/{username}")
