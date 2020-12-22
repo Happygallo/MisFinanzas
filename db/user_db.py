@@ -3,8 +3,7 @@ from pydantic import BaseModel
 
 class UserDB(BaseModel):
     username: str
-    password: str
-
+    password: str    
 class BudgetDB(BaseModel):
     username: str
     budget: int
@@ -20,9 +19,9 @@ database_users = {
 
 database_budget = {
     "gura20": BudgetDB(**{"username":"gura20",
-                            "budget":600000}),
+                            "budget":600000},),
     "watson09": BudgetDB(**{"username":"watson09",
-                            "budget":400000}),
+                            "budget":400000},),
 }
 
 

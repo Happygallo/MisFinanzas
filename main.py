@@ -41,24 +41,30 @@ async def users():
 
 # crear usuario
 @api.post("/users/")
-async def create_user(user_in: UserDB):
+async def create_user(user_in: UserDB): # usuario y contraseña
     database_users[user_in.username] = user_in
     return user_in
 
-# dar balance a usuario
-@api.post("/users/budget")
+# dar balance a usuario 
+@api.post("/users/budget") # usuario y presupuesto
 async def update_budget(budget_in: BudgetDB):
     database_budget[budget_in.username] = budget_in
     return budget_in
 
 # mostrar usuario
 @api.get("/users/{username}")
-async def display_user(username: str):
-    user_in_db = get_user(username)
-    if user_in_db == None:
-        raise HTTPException(status_code=404, detail="El usuario no existe")
-    user_out = UserOut(**user_in_db.dict())
-    return user_out
+async def ver_usuario(username: str):
+    username, budget, gastos, restante, movimientos = sum_balance(username)
+    estado = {"username": username, "budget": budget, "gastos": gastos, "restante": restante, "movimientos": movimientos}
+    return estado
+
+# @api.get("/users/{username}")
+# async def display_user(username: str):
+#     user_in_db = get_user(username)
+#     if user_in_db == None:
+#         raise HTTPException(status_code=404, detail="El usuario no existe")
+#     user_out = UserOut(**user_in_db.dict())
+#     return user_out
 
 # autenticar usuario
 @api.post("/users/auth/")
@@ -86,8 +92,3 @@ async def obtener_movimientos(username: str):
     movimientos = get_movements(username)
     return movimientos
 
-@api.get("/user/budget/see")
-async def obtener_balance(username: str):
-    username, budget, gastos, restante, movimientos = sum_balance(username)
-    estado = {"username": username, "budget": budget, "gastos": gastos, "restante": restante, "movimientos": movimientos}
-    return estado
