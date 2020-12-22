@@ -41,6 +41,7 @@ def post_user(username: str, password: str):
     UserDB.username= username
     UserDB.password = password
     database_users.append(UserDB)
+    post_budget(username, 0)
     return UserDB
 
 def post_budget(username: str, budget:int):
