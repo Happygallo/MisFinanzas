@@ -54,7 +54,10 @@ def add_movement(movement: MovementOut):
 
 def sum_balance(username: str):
     user_in = get_user(username)
-    user_budget = user_in.budget
+    try:
+        user_budget = user_in.budget
+    except:
+        user_budget = 0
 
     user_movs = get_movements(username)
     gastos = []
