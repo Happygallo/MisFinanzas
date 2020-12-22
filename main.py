@@ -15,7 +15,9 @@ origins = [
      "http://localhost", 
      "http://localhost:8080",
      "http://app-misfinanzas.herokuapp.com",
-     "https://app-misfinanzas.herokuapp.com"
+     "https://app-misfinanzas.herokuapp.com",
+     "https://testmisapp.herokuapp.com",
+     "http://testmisapp.herokuapp.com"
 ]
 
 api.add_middleware(
